@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Tempo de geração: 12/08/2025 às 04:27
+-- Tempo de geração: 22/08/2025 às 22:22
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -37,6 +37,23 @@ CREATE TABLE `autor` (
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `editora`
+--
+
+CREATE TABLE `editora` (
+  `id_editora` int(11) NOT NULL,
+  `Nome` int(180) NOT NULL,
+  `Telefone` varchar(16) NOT NULL,
+  `Endereço` varchar(70) NOT NULL,
+  `Bairro` varchar(80) NOT NULL,
+  `Cidade` varchar(100) NOT NULL,
+  `Cep` varchar(9) NOT NULL,
+  `CNPJ` int(18) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `emprestimo`
 --
 
@@ -58,8 +75,13 @@ CREATE TABLE `emprestimo` (
 --
 
 CREATE TABLE `exemplares` (
-  `id_exemplares` int(11) NOT NULL,
+  `numero_patrimonio` int(11) NOT NULL,
   `id_livro` int(11) NOT NULL,
+  `ISBN` int(15) NOT NULL,
+  `codigo_barras` varchar(25) NOT NULL,
+  `valor_livro` float(10,2) NOT NULL,
+  `data_compra` date NOT NULL,
+  `usuario_comprador` varchar(120) NOT NULL,
   `etiqueta` varchar(10) NOT NULL,
   `numero_exemplar` int(10) NOT NULL,
   `status` enum('Disponível','Emprestado','Perdido','Cancelado','Danificado','Manutenção') NOT NULL DEFAULT 'Disponível'
@@ -84,8 +106,8 @@ CREATE TABLE `genero` (
 
 CREATE TABLE `livro` (
   `id_livro` int(11) NOT NULL,
+  `id_editora` int(11) NOT NULL,
   `titulo` varchar(255) NOT NULL,
-  `editora` varchar(150) NOT NULL,
   `data_publicacao` date NOT NULL,
   `data_entrada` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -126,7 +148,9 @@ CREATE TABLE `usuarios` (
   `data_nascimento` date NOT NULL,
   `email` varchar(320) NOT NULL,
   `cpf` varchar(14) NOT NULL,
-  `telefone` varchar(15) NOT NULL
+  `telefone` varchar(15) NOT NULL,
+  `senha` varchar(127) NOT NULL,
+  `status_emprestimo` enum('Emprestado','Atrasado','','') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -140,6 +164,12 @@ ALTER TABLE `autor`
   ADD PRIMARY KEY (`id_autor`);
 
 --
+-- Índices de tabela `editora`
+--
+ALTER TABLE `editora`
+  ADD PRIMARY KEY (`id_editora`);
+
+--
 -- Índices de tabela `emprestimo`
 --
 ALTER TABLE `emprestimo`
@@ -151,7 +181,7 @@ ALTER TABLE `emprestimo`
 -- Índices de tabela `exemplares`
 --
 ALTER TABLE `exemplares`
-  ADD PRIMARY KEY (`id_exemplares`),
+  ADD PRIMARY KEY (`numero_patrimonio`),
   ADD UNIQUE KEY `uk_numero_exemplar_por_livro` (`id_livro`,`numero_exemplar`);
 
 --
@@ -164,7 +194,8 @@ ALTER TABLE `genero`
 -- Índices de tabela `livro`
 --
 ALTER TABLE `livro`
-  ADD PRIMARY KEY (`id_livro`);
+  ADD PRIMARY KEY (`id_livro`),
+  ADD KEY `id_editora` (`id_editora`);
 
 --
 -- Índices de tabela `livro_autor`
@@ -199,6 +230,12 @@ ALTER TABLE `autor`
   MODIFY `id_autor` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de tabela `editora`
+--
+ALTER TABLE `editora`
+  MODIFY `id_editora` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de tabela `emprestimo`
 --
 ALTER TABLE `emprestimo`
@@ -208,7 +245,7 @@ ALTER TABLE `emprestimo`
 -- AUTO_INCREMENT de tabela `exemplares`
 --
 ALTER TABLE `exemplares`
-  MODIFY `id_exemplares` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `numero_patrimonio` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `genero`
@@ -249,13 +286,19 @@ ALTER TABLE `usuarios`
 --
 ALTER TABLE `emprestimo`
   ADD CONSTRAINT `emprestimo_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`),
-  ADD CONSTRAINT `emprestimo_ibfk_2` FOREIGN KEY (`id_exemplares`) REFERENCES `exemplares` (`id_exemplares`);
+  ADD CONSTRAINT `emprestimo_ibfk_2` FOREIGN KEY (`id_exemplares`) REFERENCES `exemplares` (`numero_patrimonio`);
 
 --
 -- Restrições para tabelas `exemplares`
 --
 ALTER TABLE `exemplares`
   ADD CONSTRAINT `fk_exemplares_livro` FOREIGN KEY (`id_livro`) REFERENCES `livro` (`id_livro`) ON DELETE CASCADE;
+
+--
+-- Restrições para tabelas `livro`
+--
+ALTER TABLE `livro`
+  ADD CONSTRAINT `livro_ibfk_1` FOREIGN KEY (`id_editora`) REFERENCES `editora` (`id_editora`);
 
 --
 -- Restrições para tabelas `livro_autor`

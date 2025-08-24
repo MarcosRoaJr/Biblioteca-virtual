@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Tempo de geração: 22/08/2025 às 22:22
+-- Tempo de geração: 24/08/2025 às 02:05
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -42,13 +42,13 @@ CREATE TABLE `autor` (
 
 CREATE TABLE `editora` (
   `id_editora` int(11) NOT NULL,
-  `Nome` int(180) NOT NULL,
+  `Nome` varchar(180) NOT NULL,
   `Telefone` varchar(16) NOT NULL,
   `Endereço` varchar(70) NOT NULL,
   `Bairro` varchar(80) NOT NULL,
   `Cidade` varchar(100) NOT NULL,
   `Cep` varchar(9) NOT NULL,
-  `CNPJ` int(18) NOT NULL
+  `CNPJ` varchar(18) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -59,7 +59,6 @@ CREATE TABLE `editora` (
 
 CREATE TABLE `emprestimo` (
   `id_emprestimo` int(11) NOT NULL,
-  `id_exemplares` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
   `status_emprestimo` enum('Emprestado','Perdido','Atrasado','Cancelado','Devolvido') NOT NULL DEFAULT 'Emprestado',
   `data_saida` date NOT NULL,
@@ -77,9 +76,8 @@ CREATE TABLE `emprestimo` (
 CREATE TABLE `exemplares` (
   `numero_patrimonio` int(11) NOT NULL,
   `id_livro` int(11) NOT NULL,
-  `ISBN` int(15) NOT NULL,
   `codigo_barras` varchar(25) NOT NULL,
-  `valor_livro` float(10,2) NOT NULL,
+  `valor_livro` decimal(10,2) NOT NULL,
   `data_compra` date NOT NULL,
   `usuario_comprador` varchar(120) NOT NULL,
   `etiqueta` varchar(10) NOT NULL,
@@ -107,6 +105,8 @@ CREATE TABLE `genero` (
 CREATE TABLE `livro` (
   `id_livro` int(11) NOT NULL,
   `id_editora` int(11) NOT NULL,
+  `ISBN` varchar(20) NOT NULL,
+  `local_posicao` int(11) NOT NULL,
   `titulo` varchar(255) NOT NULL,
   `data_publicacao` date NOT NULL,
   `data_entrada` date NOT NULL
@@ -127,6 +127,17 @@ CREATE TABLE `livro_autor` (
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `livro_emprestimo`
+--
+
+CREATE TABLE `livro_emprestimo` (
+  `id_emprestimo` int(11) NOT NULL,
+  `id_numero_patrimonio` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `livro_genero`
 --
 
@@ -134,6 +145,31 @@ CREATE TABLE `livro_genero` (
   `id_generolivro` int(11) NOT NULL,
   `id_genero` int(11) NOT NULL,
   `id_livro` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `localidade_livro`
+--
+
+CREATE TABLE `localidade_livro` (
+  `id_campus` int(11) NOT NULL,
+  `nome` varchar(180) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `posicao_livro`
+--
+
+CREATE TABLE `posicao_livro` (
+  `id_local_geral` int(11) NOT NULL,
+  `setor` varchar(180) NOT NULL,
+  `estante` varchar(80) NOT NULL,
+  `id_campus` int(11) NOT NULL,
+  `id_local` int(11) GENERATED ALWAYS AS (concat(`setor`,`estante`,'-',`id_campus`)) STORED
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -149,8 +185,8 @@ CREATE TABLE `usuarios` (
   `email` varchar(320) NOT NULL,
   `cpf` varchar(14) NOT NULL,
   `telefone` varchar(15) NOT NULL,
-  `senha` varchar(127) NOT NULL,
-  `status_emprestimo` enum('Emprestado','Atrasado','','') NOT NULL
+  `senha` varchar(255) NOT NULL,
+  `nivel_acesso` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -174,7 +210,6 @@ ALTER TABLE `editora`
 --
 ALTER TABLE `emprestimo`
   ADD PRIMARY KEY (`id_emprestimo`),
-  ADD KEY `idx_exemplar` (`id_exemplares`),
   ADD KEY `idx_usuario` (`id_usuario`);
 
 --
@@ -195,23 +230,45 @@ ALTER TABLE `genero`
 --
 ALTER TABLE `livro`
   ADD PRIMARY KEY (`id_livro`),
-  ADD KEY `id_editora` (`id_editora`);
+  ADD UNIQUE KEY `uk_livro_isbn` (`ISBN`),
+  ADD KEY `id_editora` (`id_editora`),
+  ADD KEY `local_posicao` (`local_posicao`);
 
 --
 -- Índices de tabela `livro_autor`
 --
 ALTER TABLE `livro_autor`
   ADD PRIMARY KEY (`id_livroautor`),
-  ADD KEY `id_autor` (`id_autor`),
-  ADD KEY `id_livro` (`id_livro`);
+  ADD KEY `fk_la_autor` (`id_autor`),
+  ADD KEY `fk_la_livro` (`id_livro`);
+
+--
+-- Índices de tabela `livro_emprestimo`
+--
+ALTER TABLE `livro_emprestimo`
+  ADD KEY `livro_emprestimo_ibfk_1` (`id_numero_patrimonio`),
+  ADD KEY `id_emprestimo` (`id_emprestimo`);
 
 --
 -- Índices de tabela `livro_genero`
 --
 ALTER TABLE `livro_genero`
   ADD PRIMARY KEY (`id_generolivro`),
-  ADD KEY `id_genero` (`id_genero`),
-  ADD KEY `id_livro` (`id_livro`);
+  ADD KEY `fk_lg_genero` (`id_genero`),
+  ADD KEY `fk_lg_livro` (`id_livro`);
+
+--
+-- Índices de tabela `localidade_livro`
+--
+ALTER TABLE `localidade_livro`
+  ADD PRIMARY KEY (`id_campus`);
+
+--
+-- Índices de tabela `posicao_livro`
+--
+ALTER TABLE `posicao_livro`
+  ADD PRIMARY KEY (`id_local_geral`),
+  ADD KEY `id_campus` (`id_campus`);
 
 --
 -- Índices de tabela `usuarios`
@@ -272,6 +329,18 @@ ALTER TABLE `livro_genero`
   MODIFY `id_generolivro` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de tabela `localidade_livro`
+--
+ALTER TABLE `localidade_livro`
+  MODIFY `id_campus` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `posicao_livro`
+--
+ALTER TABLE `posicao_livro`
+  MODIFY `id_local_geral` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
@@ -285,8 +354,7 @@ ALTER TABLE `usuarios`
 -- Restrições para tabelas `emprestimo`
 --
 ALTER TABLE `emprestimo`
-  ADD CONSTRAINT `emprestimo_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`),
-  ADD CONSTRAINT `emprestimo_ibfk_2` FOREIGN KEY (`id_exemplares`) REFERENCES `exemplares` (`numero_patrimonio`);
+  ADD CONSTRAINT `emprestimo_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
 
 --
 -- Restrições para tabelas `exemplares`
@@ -298,21 +366,35 @@ ALTER TABLE `exemplares`
 -- Restrições para tabelas `livro`
 --
 ALTER TABLE `livro`
-  ADD CONSTRAINT `livro_ibfk_1` FOREIGN KEY (`id_editora`) REFERENCES `editora` (`id_editora`);
+  ADD CONSTRAINT `livro_ibfk_1` FOREIGN KEY (`id_editora`) REFERENCES `editora` (`id_editora`),
+  ADD CONSTRAINT `livro_ibfk_2` FOREIGN KEY (`local_posicao`) REFERENCES `posicao_livro` (`id_local_geral`);
 
 --
 -- Restrições para tabelas `livro_autor`
 --
 ALTER TABLE `livro_autor`
-  ADD CONSTRAINT `livro_autor_ibfk_1` FOREIGN KEY (`id_autor`) REFERENCES `autor` (`id_autor`),
-  ADD CONSTRAINT `livro_autor_ibfk_2` FOREIGN KEY (`id_livro`) REFERENCES `livro` (`id_livro`);
+  ADD CONSTRAINT `fk_la_autor` FOREIGN KEY (`id_autor`) REFERENCES `autor` (`id_autor`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_la_livro` FOREIGN KEY (`id_livro`) REFERENCES `livro` (`id_livro`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Restrições para tabelas `livro_emprestimo`
+--
+ALTER TABLE `livro_emprestimo`
+  ADD CONSTRAINT `livro_emprestimo_ibfk_1` FOREIGN KEY (`id_numero_patrimonio`) REFERENCES `exemplares` (`numero_patrimonio`),
+  ADD CONSTRAINT `livro_emprestimo_ibfk_2` FOREIGN KEY (`id_emprestimo`) REFERENCES `emprestimo` (`id_emprestimo`);
 
 --
 -- Restrições para tabelas `livro_genero`
 --
 ALTER TABLE `livro_genero`
-  ADD CONSTRAINT `livro_genero_ibfk_1` FOREIGN KEY (`id_genero`) REFERENCES `genero` (`id_genero`),
-  ADD CONSTRAINT `livro_genero_ibfk_2` FOREIGN KEY (`id_livro`) REFERENCES `livro` (`id_livro`);
+  ADD CONSTRAINT `fk_lg_genero` FOREIGN KEY (`id_genero`) REFERENCES `genero` (`id_genero`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_lg_livro` FOREIGN KEY (`id_livro`) REFERENCES `livro` (`id_livro`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Restrições para tabelas `posicao_livro`
+--
+ALTER TABLE `posicao_livro`
+  ADD CONSTRAINT `posicao_livro_ibfk_1` FOREIGN KEY (`id_campus`) REFERENCES `localidade_livro` (`id_campus`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

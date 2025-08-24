@@ -1,0 +1,12 @@
+.cadastro-container {
+    width: 100%;
+}
+
+.cadastro-container form{
+    width: 100%;
+    display: flex;
+}
+
+.shield-cadastro {
+    flex-direction: column;
+}

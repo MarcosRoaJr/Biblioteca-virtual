@@ -1,0 +1,36 @@
+.navbar {
+    background-color: rgba(255, 255, 255, 0.055);
+    padding: 1.5rem;
+    justify-content: space-between;
+}
+
+.navbar-brand a {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.navbar-brand a {
+    text-decoration: none;
+    color: white;
+}
+
+.navbar-login a {
+    background-color: rgb(255, 255, 255);
+    border-radius: 10rem;
+    padding: 0.6rem;
+    text-decoration: none;
+    color: black;
+}
+
+.navbar-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.navbar-item a {
+    text-decoration: none;
+    color: white;
+}

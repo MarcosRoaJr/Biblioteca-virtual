@@ -1,0 +1,93 @@
+/* Tela de login */
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 3rem;
+}
+
+.login-container h1 {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+}
+
+.login-container img {
+    width: auto;
+    height: 8rem;
+    filter: invert(100%);
+}
+
+.login-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.login-container form button {
+    padding: 0.8rem 1.2rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.input-box {
+    position: relative;
+    width: max-content;
+}
+
+.input-box input {
+    width: 350px;
+    padding: 14px 16px;
+    border: 2px solid #c9c9c96c;
+    border-radius: 10px;
+    background: #ffffff29;
+    outline: none;
+    font-size: 16px;
+    transition: border-color .2s ease;
+    color: #ffffff;
+}
+
+.input-box input:focus {
+    border-color: #ffffff;
+}
+
+.input-box .label {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    color: #999;
+    pointer-events: none;
+    padding: 0 6px;
+    background: transparent;
+    transition: color .25s ease;
+    font-weight: normal;
+}
+
+.input-box .char {
+    display: block;
+    line-height: 1;
+    transform: translateY(0);
+    transition:
+        transform .25s ease,
+        font-size .25s ease,
+        color .25s ease,
+        background-color .25s ease;
+    transition-delay: calc(var(--i) * 25ms);
+    border-radius: 2px;
+}
+
+.input-box input:focus~.label .char,
+.input-box input:valid~.label .char {
+    transform: translateY(-25px);
+    font-size: 14px;
+    color: #000000;
+    background: #e8e8e8;
+}

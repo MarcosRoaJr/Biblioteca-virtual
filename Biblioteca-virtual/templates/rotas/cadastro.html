@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Página Inicial{% endblock %}
+{% block content %}
+
+{% include "navbar-cadastro.html" %}
+
+<div class="cadastro-container d-flex-center">
+    <form action="/cadastrar" method="POST">
+        <div class="d-flex shield-cadastro">
+            <h1>Cadastro</h1>
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="text" name="nome" placeholder="Nome" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" name="senha" placeholder="Senha" required>
+            </div>
+        </div>
+        <div class="d-flex shield-cadastro">
+            <h1>Localidade</h1>
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="text" name="nome" placeholder="Nome" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" name="senha" placeholder="Senha" required>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

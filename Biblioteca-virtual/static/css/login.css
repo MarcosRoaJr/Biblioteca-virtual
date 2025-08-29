@@ -80,7 +80,7 @@
         font-size .25s ease,
         color .25s ease,
         background-color .25s ease;
-    transition-delay: calc(var(--i) * 25ms);
+    transition-delay: calc(var(--i) * 20ms);
     border-radius: 2px;
 }
 
@@ -90,4 +90,16 @@
     font-size: 14px;
     color: #000000;
     background: #e8e8e8;
+}
+
+.msg-alerta {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 1rem;
+    background: #f8d7da;
+    color: #721c24;
+    padding: 1rem;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
 }

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Página Inicial{% endblock %}
+{% block content %}
+
+<style>
+    
+</style>
+
+<p>Bem-vindo, {{ usuario.nome }}!</p>
+
+<p>Cracha: {{ usuario.id }}</p>
+<p>Email: {{ usuario.email }}</p>
+<p>Data de Nascimento: {{ usuario.data_nascimento }}</p>
+<p>CPF: {{ usuario.cpf }}</p>
+<p>Telefone: {{ usuario.telefone }}</p>
+<p>Nível de acesso: {{ usuario.nivel_acesso }}</p>
+
+
+{% endblock %}

@@ -17,7 +17,8 @@
 .navbar-login a {
     background-color: rgb(255, 255, 255);
     border-radius: 10rem;
-    padding: 0.6rem;
+    padding: 0.5rem;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     text-decoration: none;
     color: black;
 }

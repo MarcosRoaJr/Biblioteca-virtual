@@ -4,17 +4,19 @@
 {% block content %}
 
 <style>
-    
+
 </style>
+<div>
+    <ul class="usuario-info">
+        <li>Usuario: {{ usuario.nome }}</li>
+        <li>Cracha: {{ usuario.id }}</li>
+        <li>Email: {{ usuario.email }}</li>
+        <li>Data de Nascimento: {{ usuario.data_nascimento }}</li>
+        <li>CPF: {{ usuario.cpf }}</li>
+        <li>Telefone: {{ usuario.telefone }}</li>
+        <li>Nível de acesso: {{ usuario.nivel_acesso }}</li>
+    </ul>
+</div>
 
-<p>Bem-vindo, {{ usuario.nome }}!</p>
 
-<p>Cracha: {{ usuario.id }}</p>
-<p>Email: {{ usuario.email }}</p>
-<p>Data de Nascimento: {{ usuario.data_nascimento }}</p>
-<p>CPF: {{ usuario.cpf }}</p>
-<p>Telefone: {{ usuario.telefone }}</p>
-<p>Nível de acesso: {{ usuario.nivel_acesso }}</p>
-
-
-{% endblock %}
+    {% endblock %}

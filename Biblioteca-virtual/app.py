@@ -67,7 +67,7 @@ def inject_user():
 
 @app.route("/usuario", methods=["GET", "POST"])
 def usuario():
-    return render_template("rotas/usuario.html", show_navbar=False)
+    return render_template("rotas/usuario.html", show_navbar=True)
 
 if __name__ == "__main__":
     app.run(debug=True)

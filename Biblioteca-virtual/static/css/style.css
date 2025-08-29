@@ -2,6 +2,7 @@
 @import url(componentes.css);
 @import url(cadastro.css);
 @import url(login.css);
+@import url(usuario.css);
 
 * {
     margin: 0;

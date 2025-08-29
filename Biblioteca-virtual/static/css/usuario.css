@@ -1,0 +1,13 @@
+.usuario-info {
+    background-color: #222;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 20px 0;
+    list-style: none;
+}
+
+.usuario-info li {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #fff;
+}

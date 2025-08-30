@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Página Inicial{% endblock %}
+{% block content %}
+<div class="usuario-container d-flex-center">
+    <div>
+        <ul class="usuario-info">
+            <li>Usuario: {{ usuario.nome }}</li>
+            <li>Cracha: {{ usuario.id }}</li>
+            <li>Email: {{ usuario.email }}</li>
+            <li>Data de Nascimento: {{ usuario.data_nascimento }}</li>
+            <li>CPF: {{ usuario.cpf }}</li>
+            <li>Telefone: {{ usuario.telefone }}</li>
+            <li>Nível de acesso: {{ usuario.nivel_acesso }}</li>
+        </ul>
+    </div>
+    <div style="margin-top: 1.5rem;">
+        <h2>Alterar informações:</h2>
+        <form class="d-flex-center alterar-info">
+            <div class="d-flex-center">
+                <div class="cadastro-container">
+                    <div class="cadastro-shield">
+                        <label for="">Nome</label>
+                        <input type="text">
+                    </div>
+                    <div class="cadastro-shield">
+                        <label for="">Email</label>
+                        <input type="email">
+                    </div>
+                    <div class="cadastro-shield">
+                        <label for="">Telefone</label>
+                        <input type="tel">
+                    </div>
+                    <div class="cadastro-shield">
+                        <label for="">Data de nascimento</label>
+                        <input type="date">
+                    </div>
+                </div>
+                <div class="cadastro-container">
+                    <div class="cadastro-shield">
+                        <label for="">CPF</label>
+                        <input type="text">
+                    </div>
+                    <div class="cadastro-shield">
+                        <label for="">Senha</label>
+                        <input type="text">
+                    </div>
+                    <div class="cadastro-shield">
+                        <label for="">Confirmar Senha</label>
+                        <input type="text">
+                    </div>
+                    <div class="cadastro-shield">
+                        <label for="">Nivel de acesso</label>
+                        <input type="number">
+                    </div>
+                </div>
+            </div>
+            <button>Enviar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

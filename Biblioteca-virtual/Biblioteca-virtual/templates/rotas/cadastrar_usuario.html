@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Página Inicial{% endblock %}
+
+{% block content %}
+<div class="cadastro d-flex-center">
+    <h2>Cadastro usuario:</h2>
+    <form class="d-flex-center">
+        <div class="d-flex-center">
+            <div class="cadastro-container">
+                <div class="cadastro-shield">
+                    <label for="">Nome</label>
+                    <input type="text">
+                </div>
+                <div class="cadastro-shield">
+                    <label for="">Email</label>
+                    <input type="text">
+                </div>
+                <div class="cadastro-shield">
+                    <label for="">Telefone</label>
+                    <input type="text">
+                </div>
+                <div class="cadastro-shield">
+                    <label for="">Data de nascimento</label>
+                    <input type="text">
+                </div>
+            </div>
+            <div class="cadastro-container">
+                <div class="cadastro-shield">
+                    <label for="">CPF</label>
+                    <input type="text">
+                </div>
+                <div class="cadastro-shield">
+                    <label for="">Senha</label>
+                    <input type="text">
+                </div>
+                <div class="cadastro-shield">
+                    <label for="">Confirmar Senha</label>
+                    <input type="text">
+                </div>
+                <div class="cadastro-shield">
+                    <label for="">Nivel de acesso</label>
+                    <input type="text">
+                </div>
+            </div>
+        </div>
+        <button>Enviar</button>
+    </form>
+</div>
+{% endblock %}

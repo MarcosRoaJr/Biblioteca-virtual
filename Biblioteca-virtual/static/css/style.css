@@ -3,6 +3,7 @@
 @import url(cadastro.css);
 @import url(login.css);
 @import url(usuario.css);
+@import url(buscar.css);
 
 * {
     margin: 0;

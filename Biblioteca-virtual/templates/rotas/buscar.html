@@ -1,8 +1,75 @@
 {% extends "base.html" %}
-
 {% block title %}Página Inicial{% endblock %}
 {% block content %}
-<div class="buscar-container">
-    
+
+<div class="container-buscar d-flex">
+    <form action="" method="post" class="buscar-livro d-flex">
+        <h2>Buscar livro</h2>
+
+        <label>Id Livro:</label>
+        <input type="text" id="identificador_livro" name="identificador_livro">
+
+        <label>Nome Livro:</label>
+        <select name="livro_escolhido" id="livro_escolhido">
+            <option value="">-- Selecione --</option>
+            {% for escolha in titulos %}
+            <option value="{{ escolha.id_livro }}">{{ escolha.titulo }}</option>
+            {% endfor %}
+        </select>
+
+        <label>ISBN:</label>
+        <input type="text" id="isbn_livro" name="isbn_livro">
+
+        <button id="botao" type="submit">Procurar</button>
+    </form>
+
+    <div class="livro-info d-flex">
+        <table>
+            <tr>
+                <th>Id livro</th>
+                <td>{{ livro.id_livro }}</td>
+            </tr>
+            <tr>
+                <th>Título</th>
+                <td>{{ livro.titulo }}</td>
+            </tr>
+            <tr>
+                <th>Gênero</th>
+                <td>{{ genero }}</td>
+            </tr>
+            <tr>
+                <th>Editora</th>
+                <td>{{ editora }}</td>
+            </tr>
+            <tr>
+                <th>ISBN</th>
+                <td>{{ livro.ISBN }}</td>
+            </tr>
+            <tr>
+                <th>Data publicação</th>
+                <td>{{ livro.data_publicacao }}</td>
+            </tr>
+            <tr>
+                <th>Data de recebimento</th>
+                <td>{{ livro.data_entrada }}</td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <th>Câmpus</th>
+                <td>{{ campus.nome}}</td>
+            </tr>
+            <tr>
+                <th>Setor</th>
+                <td>{{ locallivro.setor }}</td>
+            </tr>
+            <tr>
+                <th>Estante</th>
+                <td>{{ locallivro.estante }}</td>
+            </tr>
+        </table>
+    </div>
 </div>
+
 {% endblock %}
